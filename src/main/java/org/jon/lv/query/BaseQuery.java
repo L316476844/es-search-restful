@@ -21,6 +21,9 @@ import java.util.Collections;
  * version V1.0.0
  */
 public class BaseQuery {
+
+    public static final String QUERY_ALL = "{\"query\": { \"match_all\": {} }}";
+
     public static void queryAll(RestClient restClient) throws IOException {
 
         HttpEntity entity = new NStringEntity(
