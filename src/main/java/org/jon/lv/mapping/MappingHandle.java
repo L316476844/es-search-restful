@@ -1,5 +1,9 @@
 package org.jon.lv.mapping;
 
+import com.alibaba.fastjson.JSONObject;
+import org.apache.http.HttpEntity;
+import org.apache.http.entity.ContentType;
+import org.apache.http.nio.entity.NStringEntity;
 import org.apache.http.util.EntityUtils;
 import org.elasticsearch.client.Response;
 import org.elasticsearch.client.RestClient;
@@ -28,7 +32,31 @@ public class MappingHandle extends BaseHandle {
     public String queryAllIndex() throws IOException {
         Response response =  restClient.performRequest("GET", QUERY_ALL_INDEX,
                 Collections.singletonMap("pretty", "true"));
+        return EntityUtils.toString(response.getEntity());
+    }
 
+    /**
+     * 建立映射
+     * @param index
+     * @param type
+     * @param properties
+     * @return
+     */
+    public String createMapping(String index, String type, JSONObject properties) throws IOException {
+
+        //twitter/_mapping/user
+        String url = "/" + index + "/" + Constant._MAPPING + "/" + type ;
+
+        // 字段属性
+        JSONObject typeObj = new JSONObject();
+        typeObj.put("properties", properties);
+
+        HttpEntity entity = new NStringEntity(
+                typeObj.toJSONString(), ContentType.APPLICATION_JSON);
+
+        Response response =  restClient.performRequest("PUT", url,
+                Collections.singletonMap("pretty", "true"),
+                entity);
 
         return EntityUtils.toString(response.getEntity());
     }
