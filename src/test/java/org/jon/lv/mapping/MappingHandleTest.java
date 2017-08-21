@@ -1,5 +1,6 @@
 package org.jon.lv.mapping;
 
+import com.alibaba.fastjson.JSONObject;
 import org.elasticsearch.client.RestClient;
 import org.jon.lv.ESRestClient;
 import org.junit.After;
@@ -38,9 +39,41 @@ public class MappingHandleTest {
     }
 
     @Test
+    public void createMapping() throws IOException{
+        JSONObject properties = new JSONObject();
+
+        JSONObject name = new JSONObject();
+        name.put("type", "text");
+        name.put("analyzer", "ik_max_word");
+        JSONObject price = new JSONObject();
+        price.put("type", "double");
+        price.put("store", "true");
+        JSONObject publishDate = new JSONObject();
+        publishDate.put("type", "date");
+        publishDate.put("format", "yyyy-MM-dd HH:mm:ss");
+        publishDate.put("store", "true");
+        JSONObject title = new JSONObject();
+        title.put("type", "keyword");
+        title.put("store", "true");
+
+        JSONObject plotName = new JSONObject();
+        title.put("type", "keyword");
+        title.put("store", "true");
+
+        properties.put("name", name);
+        properties.put("price", price);
+        properties.put("publishDate", publishDate);
+        properties.put("title", title);
+        properties.put("plotName", plotName);
+
+        String str = mappingHandle.createMapping("test", "plot",properties);
+        System.out.println(str);
+    }
+
+    @Test
     public void getMapping() throws IOException {
         String str = mappingHandle.getMapping("vinuxcart", "cart");
-        System.out.println(str);
+        System.out.println("-----------------------" + str);
     }
 
     @Test

@@ -1,5 +1,6 @@
 package org.jon.lv.mapping;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.http.HttpEntity;
 import org.apache.http.entity.ContentType;
@@ -35,6 +36,13 @@ public class MappingHandle extends BaseHandle {
         return EntityUtils.toString(response.getEntity());
     }
 
+    public String queryAllMapping() throws IOException {
+        Response response =  restClient.performRequest("GET", QUERY_ALL_MAPPING,
+                Collections.singletonMap("pretty", "true"));
+
+        return EntityUtils.toString(response.getEntity());
+    }
+
     /**
      * 建立映射
      * @param index
@@ -44,26 +52,28 @@ public class MappingHandle extends BaseHandle {
      */
     public String createMapping(String index, String type, JSONObject properties) throws IOException {
 
-        //twitter/_mapping/user
-        String url = "/" + index + "/" + Constant._MAPPING + "/" + type ;
+        if(getMapping(index, type) != null ) return null;
+
+        String url = "/" + index;
 
         // 字段属性
         JSONObject typeObj = new JSONObject();
         typeObj.put("properties", properties);
 
+        JSONObject mappingObj = new JSONObject();
+        mappingObj.put(type, typeObj);
+
+        JSONObject mapping = new JSONObject();
+        mapping.put("mappings", mappingObj);
+
+        System.out.println(mapping.toJSONString());
+
         HttpEntity entity = new NStringEntity(
-                typeObj.toJSONString(), ContentType.APPLICATION_JSON);
+                mapping.toJSONString(), ContentType.APPLICATION_JSON);
 
         Response response =  restClient.performRequest("PUT", url,
-                Collections.singletonMap("pretty", "true"),
+                Collections.EMPTY_MAP,
                 entity);
-
-        return EntityUtils.toString(response.getEntity());
-    }
-
-    public String queryAllMapping() throws IOException {
-        Response response =  restClient.performRequest("GET", QUERY_ALL_MAPPING,
-                Collections.singletonMap("pretty", "true"));
 
         return EntityUtils.toString(response.getEntity());
     }
@@ -74,7 +84,13 @@ public class MappingHandle extends BaseHandle {
         Response response =  restClient.performRequest("GET", url,
                 Collections.singletonMap("pretty", "true"));
 
-        return EntityUtils.toString(response.getEntity());
+        String json = EntityUtils.toString(response.getEntity());
+        JSONObject result = JSON.parseObject(json);
+        if(result.isEmpty()){
+            return null;
+        }
+
+        return json;
     }
 
     public String deleteMapping(String index) throws IOException {
@@ -103,37 +119,5 @@ public class MappingHandle extends BaseHandle {
             "analyzer": "ik_max_word",
             "search_analyzer": "ik_max_word"
         }
-     */
-
-    /**
-     * eg:映射例子： library（index）-books(type)
-     * {
-         "library": {
-           "mappings": {
-             "books": {
-                 "properties": {
-                     "name": {
-                     "type": "string",
-                     "index": "not_analyzed"
-                     },
-                     "number": {
-                     "type": "object",
-                     "dynamic": "true"
-                     },
-                     "price": {
-                     "type": "double"
-                     },
-                     "publish_date": {
-                     "type": "date",
-                     "format": "dateOptionalTime"
-                     },
-                     "title": {
-                     "type": "string"
-                    }
-            }
-           }
-          }
-         }
-     }
      */
 }
