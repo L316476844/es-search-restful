@@ -16,6 +16,8 @@ public interface Constant {
     String _SOURCE = "_source";
 
     String _BULK = "_bulk";
+    String _MAPPING = "_mapping";
+    String _DELETE_BY_QUERY = "_delete_by_query";
 
     String ID= "id";
 }
