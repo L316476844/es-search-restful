@@ -81,16 +81,21 @@ public class MappingHandle extends BaseHandle {
     public String getMapping(String index, String type) throws IOException {
         String url = "/" + index + "/" + type + "/" + Constant._MAPPING;
 
-        Response response =  restClient.performRequest("GET", url,
-                Collections.singletonMap("pretty", "true"));
+        try {
+            Response response =  restClient.performRequest("GET", url,
+                    Collections.singletonMap("pretty", "true"));
 
-        String json = EntityUtils.toString(response.getEntity());
-        JSONObject result = JSON.parseObject(json);
-        if(result.isEmpty()){
-            return null;
+            String json = EntityUtils.toString(response.getEntity());
+            JSONObject result = JSON.parseObject(json);
+            if(result.isEmpty()){
+                return null;
+            }
+            return json;
+        }catch (Exception e){
+            // e.printStackTrace();
         }
 
-        return json;
+       return null;
     }
 
     public String deleteMapping(String index) throws IOException {

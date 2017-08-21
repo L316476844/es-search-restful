@@ -44,6 +44,7 @@ public class MappingHandleTest {
 
         JSONObject name = new JSONObject();
         name.put("type", "text");
+        name.put("index", true);
         name.put("analyzer", "ik_max_word");
         JSONObject price = new JSONObject();
         price.put("type", "double");
@@ -57,8 +58,8 @@ public class MappingHandleTest {
         title.put("store", "true");
 
         JSONObject plotName = new JSONObject();
-        title.put("type", "keyword");
-        title.put("store", "true");
+        plotName.put("type", "keyword");
+        plotName.put("store", "true");
 
         properties.put("name", name);
         properties.put("price", price);
@@ -66,7 +67,7 @@ public class MappingHandleTest {
         properties.put("title", title);
         properties.put("plotName", plotName);
 
-        String str = mappingHandle.createMapping("test", "plot",properties);
+        String str = mappingHandle.createMapping("test1", "plot",properties);
         System.out.println(str);
     }
 
