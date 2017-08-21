@@ -1,8 +1,7 @@
 package org.jon.lv;
 
-import org.apache.http.HttpHost;
 import org.jon.lv.constant.ESEnvironment;
-import org.jon.lv.constant.LoaderUtils;
+import org.jon.lv.utils.LoaderUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

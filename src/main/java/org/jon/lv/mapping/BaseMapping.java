@@ -3,7 +3,7 @@ package org.jon.lv.mapping;
 import org.apache.http.util.EntityUtils;
 import org.elasticsearch.client.Response;
 import org.elasticsearch.client.RestClient;
-import org.jon.lv.ESRestClient;
+import org.jon.lv.base.BaseHandle;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -15,19 +15,19 @@ import java.util.Collections;
  * @date 2017/8/18 16:42
  * version V1.0.0
  */
-public class BaseMapping {
+public class BaseMapping extends BaseHandle {
 
     public final static String QUERY_ALL_INDEX = "/_cat/indices?v";
 
-    public static String getQueryAllIndex(RestClient restClient) throws IOException {
+    public BaseMapping(RestClient restClient) {
+        super(restClient);
+    }
+
+    public String getQueryAllIndex() throws IOException {
         Response response =  restClient.performRequest("GET", QUERY_ALL_INDEX,
                 Collections.singletonMap("pretty", "true"));
 
         String str = EntityUtils.toString(response.getEntity());
         return str;
-    }
-
-    public static void main(String[] args) throws IOException {
-        System.out.println(getQueryAllIndex(ESRestClient.getClient()));
     }
 }

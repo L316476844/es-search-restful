@@ -1,4 +1,4 @@
-package org.jon.lv.constant;
+package org.jon.lv.utils;
 
 import org.apache.log4j.helpers.LogLog;
 import org.slf4j.Logger;
@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import java.net.URL;
 
 /**
- * @Package org.jon.lv.constant.LoaderUtils
+ * @Package org.jon.lv.utils.LoaderUtils
  * @Description: LoaderUtils
  * @Copyright: Copyright (c) 2016
  * Author lv bin
