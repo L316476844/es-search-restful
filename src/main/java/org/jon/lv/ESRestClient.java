@@ -4,6 +4,7 @@ import org.apache.http.HttpHost;
 import org.apache.http.client.config.RequestConfig;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestClientBuilder;
+import org.jon.lv.base.InitializeArgs;
 
 import java.io.IOException;
 

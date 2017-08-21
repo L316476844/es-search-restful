@@ -1,4 +1,4 @@
-package org.jon.lv;
+package org.jon.lv.base;
 
 import org.jon.lv.constant.ESEnvironment;
 import org.jon.lv.utils.LoaderUtils;
@@ -11,7 +11,7 @@ import java.net.URL;
 import java.util.Properties;
 
 /**
- * @Package org.jon.lv.InitializeArgs
+ * @Package org.jon.lv.base.InitializeArgs
  * @Description: 初始化es 参数
  * @Copyright: Copyright (c) 2016
  * Author lv bin
