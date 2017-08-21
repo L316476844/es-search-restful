@@ -6,8 +6,6 @@ import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestClientBuilder;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * @Package org.jon.lv.ESRestClient
@@ -21,95 +19,88 @@ public class ESRestClient {
 
     private static RestClient restClient = null;
 
-    private HttpHost[] httpHosts;
+    private static final int connectTimeout = 5000;
 
-    private int connectTimeout = 5000;
+    private static final int socketTimeout = 60000;
 
-    private int socketTimeout = 60000;
-
-    private int maxRetryTimeoutMillis = 60000;
-
-    public HttpHost[] getHttpHosts() {
-        return httpHosts;
-    }
-
-    public void setHttpHosts(HttpHost[] httpHosts) {
-        this.httpHosts = httpHosts;
-    }
-
-    public int getConnectTimeout() {
-        return connectTimeout;
-    }
-
-    public void setConnectTimeout(int connectTimeout) {
-        this.connectTimeout = connectTimeout;
-    }
-
-    public int getSocketTimeout() {
-        return socketTimeout;
-    }
-
-    public void setSocketTimeout(int socketTimeout) {
-        this.socketTimeout = socketTimeout;
-    }
-
-    public int getMaxRetryTimeoutMillis() {
-        return maxRetryTimeoutMillis;
-    }
-
-    public void setMaxRetryTimeoutMillis(int maxRetryTimeoutMillis) {
-        this.maxRetryTimeoutMillis = maxRetryTimeoutMillis;
-    }
-
-    public ESRestClient(){
-        super();
-    }
-
-    public ESRestClient(HttpHost[] httpHosts){
-        this.httpHosts = httpHosts;
-    }
-
-    public ESRestClient(HttpHost[] httpHosts, int connectTimeout, int socketTimeout, int maxRetryTimeoutMillis) {
-        this.httpHosts = httpHosts;
-        this.connectTimeout = connectTimeout;
-        this.socketTimeout = socketTimeout;
-        this.maxRetryTimeoutMillis = maxRetryTimeoutMillis;
-    }
+    private static final int maxRetryTimeoutMillis = 60000;
 
     /**
-     * 获取rest client 客户端
+     * 获取TCP 客户端
+     *
      * @return
      */
-    public RestClient getRestClient(){
-        if(httpHosts == null){
-            new RuntimeException("Caught Exception get properties es.http.hosts can not be null");
+    public static synchronized RestClient getClient() {
+        if (restClient == null) {
+            InitializeArgs initializeArgs = InitializeArgs.build();
+            build(initializeArgs.getHosts(), initializeArgs.getConnectTimeout(),
+                    initializeArgs.getSocketTimeout(), initializeArgs.getMaxRetryTimeoutMillis());
         }
-        if(restClient == null){
-            restClient = RestClient.builder(httpHosts)
-                    .setRequestConfigCallback(new RestClientBuilder.RequestConfigCallback() {
-                        @Override
-                        public RequestConfig.Builder customizeRequestConfig(RequestConfig.Builder requestConfigBuilder) {
-                            return requestConfigBuilder.setConnectTimeout(connectTimeout)
-                                    .setSocketTimeout(socketTimeout);
-                        }
-                    })
-                    .setMaxRetryTimeoutMillis(maxRetryTimeoutMillis)
-                    .build();
-        }
-
         return restClient;
     }
 
     /**
-     * 关闭rest client客户端
+     * 获取TCP 客户端
+     *
+     * @return
      */
-    public void closeRestClient(){
-        if(restClient != null){
+    public static synchronized RestClient getClient(String hosts, int connectTimeout,
+                                                    int socketTimeout, int maxRetryTimeoutMillis) {
+        if (restClient == null) {
+            build(hosts, connectTimeout,
+                    socketTimeout, maxRetryTimeoutMillis);
+        }
+        return restClient;
+    }
+
+
+    /**
+     * 获取TCP 客户端
+     *
+     * @return
+     */
+    public static synchronized RestClient getClient(String hosts) {
+        if (restClient == null) {
+            build(hosts, connectTimeout, socketTimeout, maxRetryTimeoutMillis);
+        }
+        return restClient;
+    }
+
+    /**
+     * 关闭客户端
+     */
+    public static void close(RestClient client){
+        if (client != null) {
             try {
-                restClient.close();
+                client.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    /**
+     * 建立连接
+     * @return
+     */
+    private static void build(String hosts, final int connectTimeout, final int socketTimeout,
+                              final int maxRetryTimeoutMillis) {
+
+        String[] hostsArr = hosts.split(",");
+        HttpHost[] httpHosts = new HttpHost[hostsArr.length];
+        for (int i = 0; i < hostsArr.length; i++) {
+            String[] tmp = hostsArr[i].split(":");
+            httpHosts[i] = new HttpHost(tmp[0], Integer.valueOf(tmp[1]), HttpHost.DEFAULT_SCHEME_NAME);
+        }
+        restClient = RestClient.builder(httpHosts)
+                .setRequestConfigCallback(new RestClientBuilder.RequestConfigCallback() {
+                    @Override
+                    public RequestConfig.Builder customizeRequestConfig(RequestConfig.Builder requestConfigBuilder) {
+                        return requestConfigBuilder.setConnectTimeout(connectTimeout)
+                                .setSocketTimeout(socketTimeout);
+                    }
+                })
+                .setMaxRetryTimeoutMillis(maxRetryTimeoutMillis)
+                .build();
     }
 }
