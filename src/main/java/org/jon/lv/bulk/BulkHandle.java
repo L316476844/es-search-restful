@@ -10,19 +10,19 @@ import org.jon.lv.constant.Constant;
 import java.io.IOException;
 
 /**
- * @Package org.jon.lv.bulk.BulkInsert
- * @Description: BulkInsert
+ * @Package org.jon.lv.bulk.BulkHandle
+ * @Description: BulkHandle
  * @Copyright: Copyright (c) 2016
  * Author lv bin
  * @date 2017/8/18 17:16
  * version V1.0.0
  */
-public class BulkInsert extends BaseHandle {
+public class BulkHandle extends BaseHandle {
 
     private static final String  BASE_BULK = "{ \"index\": {}}";
     private static JSONObject object = JSON.parseObject(BASE_BULK);
 
-    public BulkInsert(RestClient restClient) {
+    public BulkHandle(RestClient restClient) {
         super(restClient);
     }
 
