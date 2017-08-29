@@ -1,9 +1,9 @@
-package org.jon.lv.mapping.bulk;
+package org.jon.lv.mapping.insert;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.jon.lv.ESRestClient;
-import org.jon.lv.bulk.BulkHandle;
+import org.jon.lv.insert.InsertHandle;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,20 +11,32 @@ import org.junit.Test;
 import java.io.IOException;
 
 /**
- * @Package org.jon.lv.mapping.bulk.BulkHandleTest
- * @Description: BulkHandleTest
+ * @Package org.jon.lv.mapping.insert.InsertHandleTest
+ * @Description: InsertHandleTest
  * @Copyright: Copyright (c) 2016
  * Author lv bin
  * @date 2017/8/29 11:26
  * version V1.0.0
  */
-public class BulkHandleTest {
+public class InsertHandleTest {
 
-    private BulkHandle bulkHandle;
+    private InsertHandle bulkHandle;
 
     @Before
     public void init(){
-        bulkHandle = new BulkHandle(ESRestClient.getClient());
+        bulkHandle = new InsertHandle(ESRestClient.getClient());
+    }
+
+    @Test
+    public void insert() throws IOException {
+        JSONObject obj = new JSONObject();
+        obj.put("id", 23);
+        obj.put("price", 89);
+        obj.put("color", "green");
+        obj.put("make", "Toyota");
+        obj.put("sold", "2014-10-02");
+        String json = bulkHandle.insert("cars", "transactions", obj);
+        System.out.println("-------------------" + json);
     }
 
     @Test

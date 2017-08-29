@@ -12,16 +12,30 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * @Package org.jon.lv.query.MgetHandle
- * @Description: MgetHandle
+ * @Package org.jon.lv.query.GetHandle
+ * @Description: GetHandle
  * @Copyright: Copyright (c) 2016
  * Author lv bin
  * @date 2017/8/29 9:30
  * version V1.0.0
  */
-public class MgetHandle extends BaseHandle {
-    public MgetHandle(RestClient restClient) {
+public class GetHandle extends BaseHandle {
+    public GetHandle(RestClient restClient) {
         super(restClient);
+    }
+
+
+    public String get(String index, String type, Long id) throws IOException {
+        String url = BuildPath.build(index, type, String.valueOf(id));
+
+        String str = requestPretty(RequestMethod.GET, url, null);
+        JSONObject obj = JSON.parseObject(str);
+
+        JSONObject object = obj.getJSONObject("_source");
+
+        System.out.println(object);
+
+        return object.toJSONString();
     }
 
     public String mget(String index, String type, List<Long> ids) throws IOException {

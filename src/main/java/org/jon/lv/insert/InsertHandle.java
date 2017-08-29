@@ -1,6 +1,5 @@
-package org.jon.lv.bulk;
+package org.jon.lv.insert;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.elasticsearch.client.RestClient;
@@ -11,19 +10,30 @@ import org.jon.lv.utils.BuildPath;
 import java.io.IOException;
 
 /**
- * @Package org.jon.lv.bulk.BulkHandle
- * @Description: BulkHandle
+ * @Package org.jon.lv.insert.InsertHandle
+ * @Description: InsertHandle
  * @Copyright: Copyright (c) 2016
  * Author lv bin
  * @date 2017/8/18 17:16
  * version V1.0.0
  */
-public class BulkHandle extends BaseHandle {
+public class InsertHandle extends BaseHandle {
 
     private static final String  BASE_INSERT = "{ \"index\": {}}";
 
-    public BulkHandle(RestClient restClient) {
+    public InsertHandle(RestClient restClient) {
         super(restClient);
+    }
+
+    public String insert(String index, String type, JSONObject object) throws IOException{
+
+        if(!object.containsKey(Constant.ID)){
+            return null;
+        }
+
+        String url = BuildPath.build(index, type, object.getString("id"));
+
+        return requestPretty(RequestMethod.POST, url, object.toJSONString());
     }
 
     public String batchInsert(String index, String type, JSONArray jsonArray) throws IOException {
