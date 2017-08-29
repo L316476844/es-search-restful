@@ -40,35 +40,4 @@ public class BaseQuery {
         JSONObject jsonObject = JSON.parseObject(str);
 
     }
-
-    public static JSONObject get(RestClient restClient, int id) throws IOException {
-        Response response = restClient.performRequest("GET", "/jon/books/" + id,
-                Collections.singletonMap("pretty", "true"));
-
-        String str = EntityUtils.toString(response.getEntity());
-
-        System.out.println(str);
-
-        JSONObject jsonObject = JSON.parseObject(str);
-
-
-        JSONObject object = jsonObject.getJSONObject("_source");
-
-        System.out.println(object);
-
-        return object;
-    }
-
-    public static void putData(RestClient restClient, JSONObject object) throws IOException {
-        //index a document
-        HttpEntity entity = new NStringEntity(
-                object.toString(), ContentType.APPLICATION_JSON);
-
-        Response indexResponse = restClient.performRequest(
-                "PUT",
-                "/jon/books/" + object.get("id"),
-                Collections.<String, String>emptyMap(),
-                entity);
-
-    }
 }

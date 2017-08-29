@@ -20,29 +20,29 @@ import java.util.List;
  */
 public class GetHandleTest {
 
-    private GetHandle mgetHandle;
+    private GetHandle getHandle;
 
     @Before
     public void init(){
-        mgetHandle = new GetHandle(ESRestClient.getClient());
+        getHandle = new GetHandle(ESRestClient.getClient());
     }
 
     @Test
     public void get() throws IOException{
-        mgetHandle.get("jon", "books", 1L);
+        getHandle.get("jon", "books", 1L);
     }
 
     @Test
     public void mget() throws IOException {
         List<Long> ids = Arrays.asList(1L, 2L);
 
-        mgetHandle.mget("jon", "books", ids);
+        getHandle.mget("jon", "books", ids);
     }
 
 
     @After
     public void close() throws IOException {
-        mgetHandle.restClient.close();
+        getHandle.restClient.close();
     }
 
 }

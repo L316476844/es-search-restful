@@ -19,8 +19,6 @@ import java.io.IOException;
  */
 public class InsertHandle extends BaseHandle {
 
-    private static final String  BASE_INSERT = "{ \"index\": {}}";
-
     public InsertHandle(RestClient restClient) {
         super(restClient);
     }
