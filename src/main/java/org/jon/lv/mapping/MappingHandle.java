@@ -32,16 +32,11 @@ public class MappingHandle extends BaseHandle {
     }
 
     public String queryAllIndex() throws IOException {
-        Response response =  restClient.performRequest("GET", QUERY_ALL_INDEX,
-                Collections.singletonMap("pretty", "true"));
-        return EntityUtils.toString(response.getEntity());
+        return requestPretty(RequestMethod.GET, QUERY_ALL_INDEX, null);
     }
 
     public String queryAllMapping() throws IOException {
-        Response response =  restClient.performRequest("GET", QUERY_ALL_MAPPING,
-                Collections.singletonMap("pretty", "true"));
-
-        return EntityUtils.toString(response.getEntity());
+        return requestPretty(RequestMethod.GET, QUERY_ALL_MAPPING, null);
     }
 
     /**
@@ -69,24 +64,14 @@ public class MappingHandle extends BaseHandle {
 
         System.out.println(mapping.toJSONString());
 
-        HttpEntity entity = new NStringEntity(
-                mapping.toJSONString(), ContentType.APPLICATION_JSON);
-
-        Response response =  restClient.performRequest("PUT", url,
-                Collections.EMPTY_MAP,
-                entity);
-
-        return EntityUtils.toString(response.getEntity());
+        return requestEmpty(RequestMethod.PUT, url, mapping.toJSONString());
     }
 
     public String getMapping(String index, String type) throws IOException {
         String url = BuildPath.build(index, type, Constant._MAPPING);
 
         try {
-            Response response =  restClient.performRequest("GET", url,
-                    Collections.singletonMap("pretty", "true"));
-
-            String json = EntityUtils.toString(response.getEntity());
+            String json = requestPretty(RequestMethod.GET, url, null);
             JSONObject result = JSON.parseObject(json);
             if(result.isEmpty()){
                 return null;
@@ -102,10 +87,7 @@ public class MappingHandle extends BaseHandle {
     public String deleteMapping(String index) throws IOException {
         String url = BuildPath.buildUrl(index);
 
-        Response response =  restClient.performRequest("DELETE", url,
-                Collections.EMPTY_MAP);
-
-        return EntityUtils.toString(response.getEntity());
+        return requestEmpty(RequestMethod.DELETE, url, null);
     }
 
     /**

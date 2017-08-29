@@ -3,18 +3,12 @@ package org.jon.lv.query;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import org.apache.http.HttpEntity;
-import org.apache.http.entity.ContentType;
-import org.apache.http.nio.entity.NStringEntity;
-import org.apache.http.util.EntityUtils;
-import org.elasticsearch.client.Response;
 import org.elasticsearch.client.RestClient;
 import org.jon.lv.base.BaseHandle;
 import org.jon.lv.constant.Constant;
 import org.jon.lv.utils.BuildPath;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -32,19 +26,10 @@ public class MgetHandle extends BaseHandle {
 
     public String mget(String index, String type, List<Long> ids) throws IOException {
         String url = BuildPath.build(index, type, Constant._MGET);
-
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("ids", ids);
 
-        HttpEntity entity = new NStringEntity(
-                jsonObject.toJSONString(), ContentType.APPLICATION_JSON);
-
-        Response response =  restClient.performRequest("GET", url,
-                Collections.singletonMap("pretty", "true"),
-                entity);
-
-        String str = EntityUtils.toString(response.getEntity());
-
+        String str = requestPretty(RequestMethod.GET, url, jsonObject.toJSONString());
         JSONObject obj = JSON.parseObject(str);
 
         JSONArray jsonArray = obj.getJSONArray("docs");

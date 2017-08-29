@@ -68,7 +68,7 @@ public class MappingHandleTest {
         properties.put("title", title);
         properties.put("plotName", plotName);
 
-        String str = mappingHandle.createMapping("test1", "plot",properties);
+        String str = mappingHandle.createMapping("test", "plot",properties);
         System.out.println(str);
     }
 
@@ -80,7 +80,7 @@ public class MappingHandleTest {
 
     @Test
     public void deleteMapping() throws IOException {
-        String str = mappingHandle.deleteMapping("test");
+        String str = mappingHandle.deleteMapping("test1");
         System.out.println(str);
     }
 

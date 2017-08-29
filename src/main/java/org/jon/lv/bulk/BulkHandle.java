@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.elasticsearch.client.RestClient;
 import org.jon.lv.base.BaseHandle;
 import org.jon.lv.constant.Constant;
+import org.jon.lv.utils.BuildPath;
 
 import java.io.IOException;
 
@@ -26,13 +27,10 @@ public class BulkHandle extends BaseHandle {
         super(restClient);
     }
 
-
     public static boolean batchInsert(String index, String type, JSONArray jsonArray) throws IOException {
-        String url = "/" + index + "/" + type + "/" + Constant._BULK;
-
+        String url = BuildPath.build(index, type, Constant._BULK);
         String content = assembleContent(jsonArray);
 
-//        ESRestClientFactory.getInstance().
         return true;
     }
 
