@@ -20,12 +20,12 @@ import java.util.List;
  * version V1.0.0
  */
 public class GetHandle extends BaseHandle {
-    public GetHandle(RestClient restClient) {
-        super(restClient);
+
+    public GetHandle(RestClient restClient, String index, String type) {
+        super(restClient, index, type);
     }
 
-
-    public String get(String index, String type, Long id) throws IOException {
+    public String get(Long id) throws IOException {
         String url = BuildPath.build(index, type, String.valueOf(id));
 
         String str = requestPretty(RequestMethod.GET, url, null);
@@ -38,7 +38,7 @@ public class GetHandle extends BaseHandle {
         return object.toJSONString();
     }
 
-    public String mget(String index, String type, List<Long> ids) throws IOException {
+    public String mget(List<Long> ids) throws IOException {
         String url = BuildPath.build(index, type, Constant._MGET);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("ids", ids);

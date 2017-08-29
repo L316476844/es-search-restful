@@ -24,19 +24,19 @@ public class GetHandleTest {
 
     @Before
     public void init(){
-        getHandle = new GetHandle(ESRestClient.getClient());
+        getHandle = new GetHandle(ESRestClient.getClient(), "jon", "books");
     }
 
     @Test
     public void get() throws IOException{
-        getHandle.get("jon", "books", 1L);
+        getHandle.get(1L);
     }
 
     @Test
     public void mget() throws IOException {
         List<Long> ids = Arrays.asList(1L, 2L);
 
-        getHandle.mget("jon", "books", ids);
+        getHandle.mget(ids);
     }
 
 

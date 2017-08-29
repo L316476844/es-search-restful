@@ -13,7 +13,7 @@ import org.jon.lv.base.BaseHandle;
  */
 public class BoolHandle extends BaseHandle{
 
-    public BoolHandle(RestClient restClient) {
-        super(restClient);
+    public BoolHandle(RestClient restClient, String index, String type) {
+        super(restClient, index, type);
     }
 }

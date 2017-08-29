@@ -23,9 +23,19 @@ import java.util.Map;
  */
 public abstract class BaseHandle {
 
+    public String index;
+
+    public String type;
+
     public RestClient restClient;
 
     public BaseHandle(RestClient restClient){
+        this.restClient = restClient;
+    }
+
+    public BaseHandle(RestClient restClient, String index, String type){
+        this.index = index;
+        this.type = type;
         this.restClient = restClient;
     }
 
