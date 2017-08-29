@@ -1,8 +1,9 @@
-package org.jon.lv.mapping;
+package org.jon.lv.mapping.mapping;
 
 import com.alibaba.fastjson.JSONObject;
 import org.elasticsearch.client.RestClient;
 import org.jon.lv.ESRestClient;
+import org.jon.lv.mapping.MappingHandle;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,7 +11,7 @@ import org.junit.Test;
 import java.io.IOException;
 
 /**
- * @Package org.jon.lv.mapping.MappingHandleTest
+ * @Package org.jon.lv.mapping.mapping.MappingHandleTest
  * @Description: MappingHandleTest
  * @Copyright: Copyright (c) 2016
  * Author lv bin
