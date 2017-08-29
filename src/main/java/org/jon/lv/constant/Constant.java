@@ -15,6 +15,7 @@ public interface Constant {
     String _ID = "_id";
     String _SOURCE = "_source";
 
+    String _SEARCH = "_search";
     String _MGET = "_mget";
     String _BULK = "_bulk";
     String _MAPPING = "_mapping";
