@@ -11,6 +11,7 @@ import org.elasticsearch.client.Response;
 import org.elasticsearch.client.RestClient;
 import org.jon.lv.base.BaseHandle;
 import org.jon.lv.constant.Constant;
+import org.jon.lv.utils.BuildPath;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -30,7 +31,7 @@ public class MgetHandle extends BaseHandle {
     }
 
     public String mget(String index, String type, List<Long> ids) throws IOException {
-        String url = "/" + index + "/" + type + "/" + Constant._MGET;
+        String url = BuildPath.build(index, type, Constant._MGET);
 
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("ids", ids);

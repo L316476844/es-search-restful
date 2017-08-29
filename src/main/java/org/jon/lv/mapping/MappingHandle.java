@@ -10,6 +10,7 @@ import org.elasticsearch.client.Response;
 import org.elasticsearch.client.RestClient;
 import org.jon.lv.base.BaseHandle;
 import org.jon.lv.constant.Constant;
+import org.jon.lv.utils.BuildPath;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -54,7 +55,7 @@ public class MappingHandle extends BaseHandle {
 
         if(getMapping(index, type) != null ) return null;
 
-        String url = "/" + index;
+        String url = BuildPath.buildUrl(index);
 
         // 字段属性
         JSONObject typeObj = new JSONObject();
@@ -79,7 +80,7 @@ public class MappingHandle extends BaseHandle {
     }
 
     public String getMapping(String index, String type) throws IOException {
-        String url = "/" + index + "/" + type + "/" + Constant._MAPPING;
+        String url = BuildPath.build(index, type, Constant._MAPPING);
 
         try {
             Response response =  restClient.performRequest("GET", url,
@@ -99,7 +100,7 @@ public class MappingHandle extends BaseHandle {
     }
 
     public String deleteMapping(String index) throws IOException {
-        String url = "/" + index;
+        String url = BuildPath.buildUrl(index);
 
         Response response =  restClient.performRequest("DELETE", url,
                 Collections.EMPTY_MAP);
