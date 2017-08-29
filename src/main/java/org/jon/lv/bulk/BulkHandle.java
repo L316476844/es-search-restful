@@ -20,22 +20,33 @@ import java.io.IOException;
  */
 public class BulkHandle extends BaseHandle {
 
-    private static final String  BASE_BULK = "{ \"index\": {}}";
-    private static JSONObject object = JSON.parseObject(BASE_BULK);
+    private static final String  BASE_INSERT = "{ \"index\": {}}";
 
     public BulkHandle(RestClient restClient) {
         super(restClient);
     }
 
-    public static boolean batchInsert(String index, String type, JSONArray jsonArray) throws IOException {
+    public String batchInsert(String index, String type, JSONArray jsonArray) throws IOException {
+
         String url = BuildPath.build(index, type, Constant._BULK);
         String content = assembleContent(jsonArray);
+        if(content == null) return null;
 
-        return true;
+        return requestPretty(RequestMethod.POST, url, content);
     }
 
-    public static String assembleContent(JSONArray jsonArray)throws RuntimeException{
+    private String assembleContent(JSONArray jsonArray)throws RuntimeException{
 
-        return null;
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < jsonArray.size(); i++) {
+            JSONObject json = jsonArray.getJSONObject(i);
+            if(!json.containsKey(Constant.ID)){
+                return null;
+            }
+            sb.append("{ \"index\": { \"_id\":"+ json.get("id") +"}}").append("\n");
+            sb.append(json.toJSONString()).append("\n");
+        }
+
+        return sb.toString();
     }
 }
