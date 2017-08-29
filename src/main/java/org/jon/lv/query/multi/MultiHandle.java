@@ -14,4 +14,19 @@ public class MultiHandle extends BaseHandle{
     public MultiHandle(RestClient restClient, String index, String type) {
         super(restClient, index, type);
     }
+
+
+
+
+   /* {
+        "query": {
+        "multi_match" : {
+            "query" : "comprihensiv guide",
+                    "fields": ["title", "summary"],
+            "fuzziness": "AUTO"
+        }
+    },
+        "_source": ["title", "summary", "publish_date"],
+        "size": 1
+    }'*/
 }
