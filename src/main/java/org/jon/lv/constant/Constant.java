@@ -38,4 +38,7 @@ public interface Constant {
     String QUERY_STRING = "query_string"; // "query": "(saerch~1 algorithm~1) AND (grant ingersoll)  OR (tom morton)"
     String SIMPLE_QUERY_STRING = "simple_query_string"; //  +/|/- 分别替换AND/OR/NOT
     String MATCH_PHRASE_PREFIX = "match_phrase_prefix";
+
+    /** ----------- result ----------------- **/
+    String HITS = "hits";
 }
