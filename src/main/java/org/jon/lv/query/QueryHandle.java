@@ -50,4 +50,35 @@ public class QueryHandle extends BaseHandle {
 
         return object.getJSONObject(Constant.HITS).toJSONString();
     }
+
+    /**
+     * 自定义多字段查询
+     * @param content - 待查询字符串内容
+     * @param from - 起始拉取位置
+     * @param size - 拉取条数
+     * @param docFields - 从文档中那些字段匹配 ---字段可以可以加权eg:["title", "summary^3"] ^3 Boosting summary field的权重调成3，这样就提高了其在结果中的权重
+     * @param rtnFields - 返回字段
+     * @return
+     * @throws IOException
+     */
+    public String multiField(String content, int from , int size, Set<String> docFields ,Set<String> rtnFields) throws IOException {
+
+        if(docFields == null || docFields.size() == 0) return null;
+
+        String url = BuildPath.build(index, type, Constant._SEARCH);
+
+        String query = "{\"query\":{\"multi_match\":{\"query\":\"" + content+"\",\"fields\":"+ ConvertUtils.collection2String(docFields) +"}}," +
+                "\"from\":" + from + ",\"size\":"+size+"}";
+
+        if(rtnFields != null && rtnFields.size() > 0){
+            query = "{\"query\":{\"multi_match\":{\"query\":\"" + content+"\",\"fields\":"+ConvertUtils.collection2String(docFields)+"}}," +
+                    "\"from\":"+from+",\"size\":"+size+",\"_source\": "+ ConvertUtils.collection2String(rtnFields)+"}";
+        }
+
+        System.out.println("-------------------" + query);
+
+        JSONObject object = JSON.parseObject(requestPretty(RequestMethod.POST, url, query));
+
+        return object.getJSONObject(Constant.HITS).toJSONString();
+    }
 }

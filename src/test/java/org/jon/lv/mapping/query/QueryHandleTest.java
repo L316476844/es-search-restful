@@ -37,6 +37,17 @@ public class QueryHandleTest {
         System.out.println(queryHandle.matchAll("guide", 0, 2, rtnFields));
     }
 
+    @Test
+    public void multiField() throws IOException {
+        Set<String> docFields = new HashSet<>();
+        docFields.addAll(Arrays.asList("title", "summary^3"));
+
+        Set<String> rtnFields = new HashSet<>();
+        rtnFields.addAll(Arrays.asList("title", "summary", "publish_date"));
+
+        System.out.println(queryHandle.multiField("guide", 0, 2, docFields, rtnFields));
+    }
+
 
     @After
     public void close() throws IOException {
