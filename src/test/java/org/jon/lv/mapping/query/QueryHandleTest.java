@@ -113,6 +113,19 @@ public class QueryHandleTest {
         System.out.println(queryHandle.queryString("(saerch~1 algorithm~1) AND (grant ingersoll)  OR (tom morton)", 0, 2, docFields, rtnFields));
     }
 
+    @Test
+    public void simpleQueryString() throws IOException {
+
+        System.out.println(queryHandle.simpleQueryString("(saerch~1 algorithm~1) + (grant ingersoll)  | (tom morton)", 0, 2, null, null));
+
+        Set<String> docFields = new HashSet<>();
+        docFields.addAll(Arrays.asList("_all", "summary^2"));
+
+        Set<String> rtnFields = new HashSet<>();
+        rtnFields.addAll(Arrays.asList("title", "summary", "publish_date"));
+        System.out.println(queryHandle.simpleQueryString("(saerch~1 algorithm~1) + (grant ingersoll)  | (tom morton)", 0, 2, docFields, rtnFields));
+    }
+
     @After
     public void close() throws IOException {
         queryHandle.restClient.close();

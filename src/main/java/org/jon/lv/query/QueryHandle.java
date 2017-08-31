@@ -219,7 +219,7 @@ public class QueryHandle extends BaseHandle {
     /**
      * query_string查询提供了一种手段可以使用一种简洁的方式运行multi_match queries, bool queries, boosting, fuzzy matching, wildcards, regexp以及range queries的组合查询
      * eg: (saerch~1 algorithm~1) AND (grant ingersoll)  OR (tom morton)
-     * @param content - 待查询字符串内容 可涵盖与或非语法 - AND OR
+     * @param content - 待查询字符串内容 可涵盖与或非语法 - AND OR NOT
      * @param from - 起始拉取位置
      * @param size - 拉取条数
      * @param docFields - 从文档中那些字段匹配
@@ -235,6 +235,32 @@ public class QueryHandle extends BaseHandle {
 
         if(rtnFields != null && rtnFields.size() > 0){
             query = "{\"query\":{\"query_string\":{\"query\":\" " + content +" \",\"fields\":" + fields + "}}," +
+                    "\"from\":" + from + ",\"size\":" + size + ",\"_source\": "+ ConvertUtils.collection2String(rtnFields)+"}";
+        }
+
+        return query(query);
+    }
+
+    /**
+     * 简单查询字符串 ----- eg:(saerch~1 algorithm~1) + (grant ingersoll)  | (tom morton)
+     * simple_query_string是query_string的另一种版本，其更适合为用户提供一个搜索框中，因为其使用+/|/- 分别替换AND/OR/NOT，
+     * 如果用输入了错误的查询，其直接忽略这种情况而不是抛出异常
+     * @param content - 待查询字符串内容 可涵盖与或非语法 -> + | -
+     * @param from - 起始拉取位置
+     * @param size - 拉取条数
+     * @param docFields - 从文档中那些字段匹配
+     * @param rtnFields - 返回字段
+     * @return
+     * @throws IOException
+     */
+    public String simpleQueryString(String content, int from , int size, Set<String> docFields, Set<String> rtnFields) throws IOException {
+
+        String fields = (docFields == null || docFields.size() == 0) ? "[\"_all\"]" : ConvertUtils.collection2String(docFields);
+        String query = "{\"query\":{\"simple_query_string\":{\"query\":\" " + content +" \",\"fields\":" + fields +"}}," +
+                "\"from\":" + from + ",\"size\":" + size + "}";
+
+        if(rtnFields != null && rtnFields.size() > 0){
+            query = "{\"query\":{\"simple_query_string\":{\"query\":\" " + content +" \",\"fields\":" + fields + "}}," +
                     "\"from\":" + from + ",\"size\":" + size + ",\"_source\": "+ ConvertUtils.collection2String(rtnFields)+"}";
         }
 
