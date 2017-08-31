@@ -100,6 +100,19 @@ public class QueryHandleTest {
         System.out.println(queryHandle.regexpQuery("t[a-z]*y", 0, 2, "authors", rtnFields));
     }
 
+    @Test
+    public void queryString() throws IOException {
+
+        System.out.println(queryHandle.queryString("(saerch~1 algorithm~1) AND (grant ingersoll)  OR (tom morton)", 0, 2, null, null));
+
+        Set<String> docFields = new HashSet<>();
+        docFields.addAll(Arrays.asList("_all", "summary^2"));
+
+        Set<String> rtnFields = new HashSet<>();
+        rtnFields.addAll(Arrays.asList("title", "summary", "publish_date"));
+        System.out.println(queryHandle.queryString("(saerch~1 algorithm~1) AND (grant ingersoll)  OR (tom morton)", 0, 2, docFields, rtnFields));
+    }
+
     @After
     public void close() throws IOException {
         queryHandle.restClient.close();
