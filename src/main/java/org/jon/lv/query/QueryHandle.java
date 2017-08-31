@@ -112,6 +112,33 @@ public class QueryHandle extends BaseHandle {
     }
 
     /**
+     * 匹配短语查询-----匹配短语查询要求查询字符串中的trems要么都出现Document中、要么trems按照输入顺序依次出现在结果中.
+     * 在默认情况下，查询输入的trems必须在搜索字符串紧挨着出现，否则将查询不到。通过指定slop间隔多少个单词仍然能够搜索到。
+     * @param content - 待查询字符串内容
+     * @param from - 起始拉取位置
+     * @param size - 拉取条数
+     * @param slop - 指定slop参数，来控制输入的trems之间有多少个单词仍然能够搜索到
+     * @param docFields - 从文档中那些字段匹配
+     * @param rtnFields - 返回字段
+     * @return
+     * @throws IOException
+     */
+    public String phraseQuery(String content, int from , int size, int slop,  Set<String> docFields ,Set<String> rtnFields) throws IOException {
+
+        String fields = (docFields == null || docFields.size() == 0) ? "[\"_all\"]" : ConvertUtils.collection2String(docFields);
+
+        String query = "{\"query\":{\"multi_match\":{\"query\":\"" + content+"\",\"fields\":"+ fields +",\"type\": \"phrase\", \"slop\": "+slop+"}}," +
+                "\"from\":" + from + ",\"size\":"+size+"}";
+
+        if(rtnFields != null && rtnFields.size() > 0){
+            query = "{\"query\":{\"multi_match\":{\"query\":\"" + content+"\",\"fields\":"+ fields +",\"type\": \"phrase\", \"slop\": "+slop+"}}," +
+                    "\"from\":"+from+",\"size\":"+size+",\"_source\": "+ ConvertUtils.collection2String(rtnFields)+"}";
+        }
+
+        return query(query);
+    }
+
+    /**
      * 通配符查询 -------eg: t* : *将会匹配零个或者多个字符
      * @param content - 待查询字符串内容
      * @param from - 起始拉取位置

@@ -60,6 +60,18 @@ public class QueryHandleTest {
         rtnFields.addAll(Arrays.asList("title", "summary", "publish_date"));
         System.out.println(queryHandle.fuzzyQuery("guide", 0, 2, docFields, rtnFields));
     }
+    @Test
+    public void phraseQuery() throws IOException {
+
+        System.out.println(queryHandle.phraseQuery("search engine", 0, 2, 3, null, null));
+
+        Set<String> docFields = new HashSet<>();
+        docFields.addAll(Arrays.asList("title", "summary"));
+
+        Set<String> rtnFields = new HashSet<>();
+        rtnFields.addAll(Arrays.asList("title", "summary", "publish_date"));
+        System.out.println(queryHandle.phraseQuery("search engine", 0, 2, 3, docFields, rtnFields));
+    }
 
     @Test
     public void wildcardQuery() throws IOException {
