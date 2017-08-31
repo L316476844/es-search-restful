@@ -1,5 +1,7 @@
 package org.jon.lv.utils;
 
+import org.jon.lv.bean.SortBean;
+
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -31,6 +33,25 @@ public class ConvertUtils {
                 sb.append(",");
             }
         }
+        sb.append("]");
+
+        return sb.toString();
+    }
+
+    public static String convertSort(SortBean... sort){
+        if(sort == null || sort.length == 0) return null;
+
+        StringBuilder sb = new StringBuilder("\"sort\": [");
+        for (int i = 0; i < sort.length; i++) {
+            SortBean bean = sort[i];
+            sb.append("{").
+                    append("\"" + bean.getDocFiled() +"\": {\"order\":\"" + bean.getSortOrder() +"\"}").
+                    append("}");
+            if(i != sort.length - 1){
+                sb.append(",");
+            }
+        }
+
         sb.append("]");
 
         return sb.toString();
