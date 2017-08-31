@@ -1,5 +1,6 @@
 package org.jon.lv.utils;
 
+import org.jon.lv.bean.RangeBean;
 import org.jon.lv.bean.SortBean;
 
 import java.util.Collection;
@@ -38,6 +39,36 @@ public class ConvertUtils {
         return sb.toString();
     }
 
+    /**
+     * 区间范围值转换
+     * @param collection
+     * @return
+     */
+    public static String convertRange(Collection<RangeBean> collection){
+        if(collection == null || collection.size() == 0) return null;
+
+        StringBuilder sb = new StringBuilder("{");
+
+        Iterator<RangeBean> iterator = collection.iterator();
+
+        while(iterator.hasNext()){
+            RangeBean bean = iterator.next();
+            sb.append("\"").append(bean.getRange()).append("\":");
+            sb.append("\"").append(bean.getValue()).append("\"");
+            if(iterator.hasNext()){
+                sb.append(",");
+            }
+        }
+        sb.append("}");
+
+        return sb.toString();
+    }
+
+    /**
+     * 排序值转换
+     * @param sort
+     * @return
+     */
     public static String convertSort(SortBean... sort){
         if(sort == null || sort.length == 0) return null;
 
