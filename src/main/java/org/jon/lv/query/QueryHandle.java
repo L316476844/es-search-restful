@@ -134,4 +134,28 @@ public class QueryHandle extends BaseHandle {
 
         return query(query);
     }
+
+    /**
+     * 正则表达式查询 -------eg: t[a-z]*y
+     * @param content - 待查询字符串内容
+     * @param from - 起始拉取位置
+     * @param size - 拉取条数
+     * @param docField - 从文档中那个字段匹配
+     * @param rtnFields - 返回字段
+     * @return
+     * @throws IOException
+     */
+    public String regexpQuery(String content, int from , int size, String docField, Set<String> rtnFields) throws IOException {
+        if(docField == null || "".equals(docField)) return null;
+
+        String query = "{\"query\":{\"regexp\":{\""+ docField +"\":\""+content+"\"}}," +
+                "\"from\":"+from+",\"size\":"+size+"}";
+
+        if(rtnFields != null && rtnFields.size() > 0){
+            query = "{\"query\":{\"regexp\":{\""+ docField +"\":\""+content+"\"}}," +
+                    "\"from\":"+from+",\"size\":"+size+",\"_source\":"+ ConvertUtils.collection2String(rtnFields)+"}";
+        }
+
+        return query(query);
+    }
 }

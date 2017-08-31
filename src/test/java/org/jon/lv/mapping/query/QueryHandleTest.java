@@ -69,6 +69,14 @@ public class QueryHandleTest {
         System.out.println(queryHandle.wildcardQuery("t*", 0, 2, "authors", rtnFields));
     }
 
+    @Test
+    public void regexpQuery() throws IOException {
+        System.out.println(queryHandle.regexpQuery("t[a-z]*y", 0, 2, "authors", null));
+        Set<String> rtnFields = new HashSet<>();
+        rtnFields.addAll(Arrays.asList("title", "summary", "publish_date"));
+        System.out.println(queryHandle.regexpQuery("t[a-z]*y", 0, 2, "authors", rtnFields));
+    }
+
     @After
     public void close() throws IOException {
         queryHandle.restClient.close();
