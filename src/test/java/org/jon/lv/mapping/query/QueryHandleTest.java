@@ -25,7 +25,7 @@ public class QueryHandleTest {
 
 
     @Before
-    public void init(){
+    public void init() {
         queryHandle = new QueryHandle(ESRestClient.getClient(), "library", "book");
     }
 
@@ -46,6 +46,19 @@ public class QueryHandleTest {
         rtnFields.addAll(Arrays.asList("title", "summary", "publish_date"));
 
         System.out.println(queryHandle.multiField("guide", 0, 2, docFields, rtnFields));
+    }
+
+    @Test
+    public void fuzzyQuery() throws IOException {
+
+        System.out.println(queryHandle.fuzzyQuery("guide", 0, 2, null, null));
+
+        Set<String> docFields = new HashSet<>();
+        docFields.addAll(Arrays.asList("title", "summary"));
+
+        Set<String> rtnFields = new HashSet<>();
+        rtnFields.addAll(Arrays.asList("title", "summary", "publish_date"));
+        System.out.println(queryHandle.fuzzyQuery("guide", 0, 2, docFields, rtnFields));
     }
 
 

@@ -34,6 +34,8 @@ public class QueryHandle extends BaseHandle {
     public String query(String queryJson) throws IOException{
         String url = BuildPath.build(index, type, Constant._SEARCH);
 
+        System.out.println("-------------------" + queryJson);
+
         JSONObject object = JSON.parseObject(requestPretty(RequestMethod.POST, url, queryJson));
         return object.getJSONObject(Constant.HITS).toJSONString();
     }
@@ -81,7 +83,30 @@ public class QueryHandle extends BaseHandle {
                     "\"from\":"+from+",\"size\":"+size+",\"_source\": "+ ConvertUtils.collection2String(rtnFields)+"}";
         }
 
-        System.out.println("-------------------" + query);
+        return query(query);
+    }
+
+    /**
+     * 模糊查询-----fuzziness的值指定为AUTO，其在term的长度大于5的时候相当于指定值为2
+     * @param content - 待查询字符串内容
+     * @param from - 起始拉取位置
+     * @param size - 拉取条数
+     * @param docFields - 从文档中那些字段匹配
+     * @param rtnFields - 返回字段
+     * @return
+     * @throws IOException
+     */
+    public String fuzzyQuery(String content, int from , int size, Set<String> docFields ,Set<String> rtnFields) throws IOException {
+
+        String fields = (docFields == null || docFields.size() == 0) ? "[\"_all\"]" : ConvertUtils.collection2String(docFields);
+
+        String query = "{\"query\":{\"multi_match\":{\"query\":\"" + content+"\",\"fields\":"+ fields +",\"fuzziness\": \"AUTO\"}}," +
+                "\"from\":" + from + ",\"size\":"+size+"}";
+
+        if(rtnFields != null && rtnFields.size() > 0){
+            query = "{\"query\":{\"multi_match\":{\"query\":\"" + content+"\",\"fields\":"+ fields +",\"fuzziness\": \"AUTO\"}}," +
+                    "\"from\":"+from+",\"size\":"+size+",\"_source\": "+ ConvertUtils.collection2String(rtnFields)+"}";
+        }
 
         return query(query);
     }
