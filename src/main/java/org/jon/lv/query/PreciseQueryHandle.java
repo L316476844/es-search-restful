@@ -75,4 +75,45 @@ public class PreciseQueryHandle{
 
         return queryHandle.query(query.toString());
     }
+
+
+//    must:: 查询指定文档一定要被包含。
+//    must_not:: 查询指定文档一定不要被包含。
+//    should:: 查询指定文档，有则可以为文档相关性加分。
+//    filter:: 与must不同 忽略了评分，并考虑了用于缓存的子句。
+
+    /* bool query应用举例
+    POST /library/book/_search
+    {
+      "query": {
+        "bool": {
+          "must": [
+             {"range" : {
+              "publish_date" : { "gte" : "2013-01-01", "lte" : "2015-04-05" }
+            }}
+          ],
+         "filter": [
+             {"multi_match" :{
+                        "query": "Solr",
+                        "fields": ["title","summary"]
+              }}
+          ],
+          "must_not": [
+            { "term": { "title": "elasticsearch" }},
+            { "match": { "authors": "clinton gormley" }}
+          ],
+          "should": [
+             {"multi_match" :{
+                        "query": "guide",
+                        "fields": ["summary"]
+              }}
+          ]
+        }
+      }
+    }
+     */
+
+    public void boolQuery(){
+
+    }
 }
