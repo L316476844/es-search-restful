@@ -96,7 +96,7 @@ public class QueryHandle extends BaseHandle {
      * @return
      * @throws IOException
      */
-    public String fuzzyQuery(String content, int from , int size, Set<String> docFields ,Set<String> rtnFields) throws IOException {
+    public String fuzzyQuery(String content, int from , int size, Set<String> docFields, Set<String> rtnFields) throws IOException {
 
         String fields = (docFields == null || docFields.size() == 0) ? "[\"_all\"]" : ConvertUtils.collection2String(docFields);
 
@@ -123,7 +123,7 @@ public class QueryHandle extends BaseHandle {
      * @return
      * @throws IOException
      */
-    public String phraseQuery(String content, int from , int size, int slop,  Set<String> docFields ,Set<String> rtnFields) throws IOException {
+    public String phraseQuery(String content, int from , int size, int slop,  Set<String> docFields, Set<String> rtnFields) throws IOException {
 
         String fields = (docFields == null || docFields.size() == 0) ? "[\"_all\"]" : ConvertUtils.collection2String(docFields);
 
@@ -133,6 +133,36 @@ public class QueryHandle extends BaseHandle {
         if(rtnFields != null && rtnFields.size() > 0){
             query = "{\"query\":{\"multi_match\":{\"query\":\"" + content+"\",\"fields\":"+ fields +",\"type\": \"phrase\", \"slop\": "+slop+"}}," +
                     "\"from\":"+from+",\"size\":"+size+",\"_source\": "+ ConvertUtils.collection2String(rtnFields)+"}";
+        }
+
+        return query(query);
+    }
+
+    /**
+     * 匹配短语前缀查询-----匹配短语前缀查询可以指定单词的一部分字符前缀即可查询到该单词
+     * @param content - 待查询字符串内容
+     * @param from - 起始拉取位置
+     * @param size - 拉取条数
+     * @param docField - 文档中的字段（文本字段text类型）
+     * @param slop - 指定slop参数，来控制输入的trems之间有多少个单词仍然能够搜索到
+     * @param max_expansions - max_expansions参数限制被匹配到的terms数量来减少资源的使用
+     * @param rtnFields - 返回字段
+     * @return
+     * @throws IOException
+     */
+    public String phrasePrefixQuery(String content, int from , int size,
+                                    String docField, int slop, int max_expansions, Set<String> rtnFields) throws IOException {
+
+        if((docField == null || "".equals(docField))) return null;
+
+        String query = "{\"query\":{\"match_phrase_prefix\":{\"" + docField + "\":" +
+                            "{\"query\":\""+content+"\",\"slop\":"+ slop +",\"max_expansions\": " + max_expansions +"}}}," +
+                            "\"from\":" + from + ",\"size\": " + size+ "}";
+
+        if(rtnFields != null && rtnFields.size() > 0){
+            query = "{\"query\":{\"match_phrase_prefix\":{\"" + docField + "\":" +
+                    "{\"query\":\""+content+"\",\"slop\":"+ slop +",\"max_expansions\": " + max_expansions +"}}}," +
+                    "\"from\":" + from + ",\"size\": " + size+ ",\"_source\": "+ ConvertUtils.collection2String(rtnFields)+"}";
         }
 
         return query(query);

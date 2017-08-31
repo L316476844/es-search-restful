@@ -60,6 +60,7 @@ public class QueryHandleTest {
         rtnFields.addAll(Arrays.asList("title", "summary", "publish_date"));
         System.out.println(queryHandle.fuzzyQuery("guide", 0, 2, docFields, rtnFields));
     }
+
     @Test
     public void phraseQuery() throws IOException {
 
@@ -71,6 +72,16 @@ public class QueryHandleTest {
         Set<String> rtnFields = new HashSet<>();
         rtnFields.addAll(Arrays.asList("title", "summary", "publish_date"));
         System.out.println(queryHandle.phraseQuery("search engine", 0, 2, 3, docFields, rtnFields));
+    }
+
+    @Test
+    public void phrasePrefixQuery() throws IOException {
+
+        System.out.println(queryHandle.phrasePrefixQuery("Organize Man", 0, 2, "title", 3, 10, null));
+
+        Set<String> rtnFields = new HashSet<>();
+        rtnFields.addAll(Arrays.asList("title", "summary", "publish_date"));
+        System.out.println(queryHandle.phrasePrefixQuery("search en", 0, 2, "summary", 3, 10, rtnFields));
     }
 
     @Test
