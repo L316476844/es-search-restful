@@ -61,6 +61,13 @@ public class QueryHandleTest {
         System.out.println(queryHandle.fuzzyQuery("guide", 0, 2, docFields, rtnFields));
     }
 
+    @Test
+    public void wildcardQuery() throws IOException {
+        System.out.println(queryHandle.wildcardQuery("t*", 0, 2, "authors", null));
+        Set<String> rtnFields = new HashSet<>();
+        rtnFields.addAll(Arrays.asList("title", "summary", "publish_date"));
+        System.out.println(queryHandle.wildcardQuery("t*", 0, 2, "authors", rtnFields));
+    }
 
     @After
     public void close() throws IOException {
