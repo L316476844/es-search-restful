@@ -79,7 +79,7 @@ public class PreciseQueryHandle{
 
 //    must:: 查询指定文档一定要被包含。
 //    must_not:: 查询指定文档一定不要被包含。
-//    should:: 查询指定文档，有则可以为文档相关性加分。
+//    should:: 查询指定文档，有则可以为文档相关性加分。 可配置参数 "minimum_should_match" : 1
 //    filter:: 与must不同 忽略了评分，并考虑了用于缓存的子句。
 
     /* bool query应用举例
@@ -88,6 +88,7 @@ public class PreciseQueryHandle{
       "query": {
         "bool": {
           "must": [
+             { "match_all": {}},
              {"range" : {
               "publish_date" : { "gte" : "2013-01-01", "lte" : "2015-04-05" }
             }}
@@ -107,7 +108,8 @@ public class PreciseQueryHandle{
                         "query": "guide",
                         "fields": ["summary"]
               }}
-          ]
+          ],
+          "minimum_should_match" : 1
         }
       }
     }
