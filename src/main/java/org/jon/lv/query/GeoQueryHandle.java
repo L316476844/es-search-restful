@@ -152,7 +152,9 @@ public class GeoQueryHandle {
                     ]
                 }
             }
-        }
+        },
+        "from": 0,
+        "size": 0
     }
      */
 }
