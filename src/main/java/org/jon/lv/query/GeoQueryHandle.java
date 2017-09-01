@@ -136,4 +136,23 @@ public class GeoQueryHandle {
     }
      */
 
+    /* es5.4 Geo Distance Aggregation  聚合函数距离范围内数量
+    POST /cities/city/_search
+    {
+        "aggs" : {
+            "rings" : {
+                "geo_distance" : {
+                    "field" : "location",
+                    "origin" : "34.50000,121.45333",
+                    "unit" : "km",
+                    "ranges" : [
+                        {"to":800},
+                        { "from" : 1, "to" : 3 },
+                        {"from":1000}
+                    ]
+                }
+            }
+        }
+    }
+     */
 }
