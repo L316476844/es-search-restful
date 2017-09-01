@@ -118,4 +118,28 @@ public class PreciseQueryHandle{
     public void boolQuery(){
 
     }
+
+
+
+    /*
+    在某些场景下，你可能想对某个特定字段设置一个因子(factor)，并通过这个因子计算某个文档的相关度(relevance score)。
+    这是典型地基于文档(document)的重要性来抬高其相关性的方式。
+    在下面例子中，我们想找到更受欢迎的图书(是通过图书的评论实现的)，并将其权重抬高，这里可以通过使用field_value_factor来实现
+     "query": {
+        "function_score": {
+            "query": {
+                "multi_match" : {
+                    "query" : "search engine",
+                    "fields": ["title", "summary"]
+                }
+            },
+            "field_value_factor": {
+                "field" : "num_reviews",
+                "modifier": "log1p",
+                "factor" : 2
+            }
+        }
+    },
+    "_source": ["title", "summary", "publish_date", "num_reviews"]
+     */
 }
